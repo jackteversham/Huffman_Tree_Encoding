@@ -14,6 +14,8 @@ namespace NODE{
     HuffmanNode::HuffmanNode(char l, int f){
         letter = l; frequency=f;
     }
+    HuffmanNode::~HuffmanNode(){}
+     
 
 
 }

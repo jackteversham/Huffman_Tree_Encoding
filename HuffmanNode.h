@@ -1,6 +1,9 @@
 
 #include <memory>
 
+#ifndef HTREE_NODE
+#define HTREE_NODE
+
 namespace NODE{
 class HuffmanNode{
 public:
@@ -11,6 +14,13 @@ public:
 
     HuffmanNode(char l, int f); //default constructor
     ~HuffmanNode(); //destructor
+    
+
+    //move constructor
+    //copy constructor
+    //assignment operator
+    //move assignment operator
 
 };
 }
+#endif
