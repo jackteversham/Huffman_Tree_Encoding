@@ -15,11 +15,11 @@ public:
     HuffmanNode(char l, int f); //default constructor
     ~HuffmanNode(); //destructor
     
-
-    //move constructor
-    //copy constructor
-    //assignment operator
-    //move assignment operator
+    //special members    
+    HuffmanNode(HuffmanNode && node_other); //move constructor - "steal the pointers of node_other"
+    HuffmanNode(HuffmanNode & node_other); //copy constructor
+    HuffmanNode & operator=(const HuffmanNode & node_other); //assignment operator
+    HuffmanNode & operator=(HuffmanNode && node_other);//move assignment operator
 
 };
 }

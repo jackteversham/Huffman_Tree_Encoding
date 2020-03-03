@@ -17,7 +17,6 @@ struct compare{
         }
     }
 };
-
 namespace TREE{
 class HuffmanTree{
 private:
@@ -28,7 +27,16 @@ public:
 
     HuffmanTree(std::unordered_map<char, int> map); //default constructor
     ~HuffmanTree(); //defualt destructor
-    
+
+    //special members    
+    HuffmanTree(HuffmanTree && tree_other); //move constructor - "steal the pointers of node_other"
+    HuffmanTree(HuffmanTree & tree_other); //copy constructor
+    HuffmanTree & operator=(const HuffmanTree & tree_other); //assignment operator
+    HuffmanTree & operator=(HuffmanTree && tree_other);//move assignment operator
+
+    void loadFrequencyMap(); //load text file and populate frequency map
+    void loadPriorityQueue();
+    void buildTree();
 
 };
 }
