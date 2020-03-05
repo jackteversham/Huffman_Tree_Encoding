@@ -3,6 +3,7 @@ This class represents the tree nodes in the underlying huffmanTree
 */
 #include "HuffmanNode.h"
 #include <memory>
+#include <vector>
 namespace NODE{
 
     char letter; //holds letter
@@ -11,12 +12,14 @@ namespace NODE{
     std::shared_ptr<HuffmanNode> linkLeft; //smart shared pointers used as left and right links for tree nodes
     std::shared_ptr<HuffmanNode> linkRight;
 
+   
     HuffmanNode::HuffmanNode(char l, int f){
-        letter = l; frequency=f;
+        letter = l; 
+        frequency=f;
     }
     HuffmanNode::~HuffmanNode(){}
 
-    HuffmanNode::HuffmanNode(HuffmanNode & node_other):letter(node_other.letter), frequency(node_other.frequency), linkLeft(node_other.linkLeft), linkRight(node_other.linkRight){} //copy constructor
+    HuffmanNode::HuffmanNode(const HuffmanNode & node_other):letter(node_other.letter), frequency(node_other.frequency), linkLeft(node_other.linkLeft), linkRight(node_other.linkRight){} //copy constructor
     HuffmanNode::HuffmanNode(HuffmanNode && node_other): letter(std::move(node_other.letter)), frequency(std::move(node_other.frequency)), linkLeft(std::move(node_other.linkLeft)), linkRight(std::move(node_other.linkRight)){//move constructor - "steal the pointers of node_other"
         node_other.letter = 0;  //move connectino to new pointer and make old connection null
         node_other.frequency = 0;

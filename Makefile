@@ -27,11 +27,12 @@ OPTIMIZE=-O3 -std=c++11 -Wall #but do not add error checking at runtime
 #the default target is debug code
 debug:
 	#cppcheck --enable=all $(PROGRAM).cpp #source code analysis
-	$(CC) $(FLAGS) $(COMPILE) HuffmanNode.o HuffmanNode.cpp #compile
-	$(CC) $(FLAGS) $(COMPILE) HuffmanTree.o HuffmanTree.cpp #compile
+	#$(CC) $(FLAGS) $(COMPILE) HuffmanNode.o HuffmanNode.cpp #compile
+	#$(CC) $(FLAGS) $(COMPILE) HuffmanTree.o HuffmanTree.cpp #compile
 	$(CC) $(FLAGS) $(COMPILE) $(PROGRAM).o $(PROGRAM).cpp #compile
 	$(CC) $(FLAGS) $(LINK) $(PROGRAM) $(PROGRAM).o #link
 	
+		
 
 #and fast executable is an additional target
 release:
@@ -39,5 +40,13 @@ release:
 	$(CC) $(OPTIMIZE) $(LINK) $(PROGRAM) $(PROGRAM).o #link
 
 clean:
+	rm -f ./test/*.o
+	rm -f ./test/test_map
 	rm -f *.o #clear out object files
 	rm -f $(PROGRAM) #and the final executable
+
+test: ./test/test_map
+	$(CC) $(FLAGS) $(COMPILE) ./test/test_map.o ./test/test_map.cpp #compile
+	$(CC) $(FLAGS) $(COMPILE) ../test_map ./test/test_map.o #link
+	cd test;\
+	./test_map	

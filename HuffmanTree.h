@@ -3,6 +3,7 @@
 #include <queue>
 #include <unordered_map>
 #include <vector>
+#include <string>
 #include "HuffmanNode.h"
 
 #ifndef HTREE_H
@@ -20,12 +21,13 @@ struct compare{
 namespace TREE{
 class HuffmanTree{
 private:
+    std::priority_queue< ::NODE::HuffmanNode, std::vector< ::NODE::HuffmanNode>, ::compare> myQueue; //priority queue to order the nodes according to their frequency to help with tree building
+
+public:
     std::unordered_map<char, int> frequencyMap; //holds the frequency of each letter where each letter is the key
-    std::priority_queue<NODE::HuffmanNode, std::vector<NODE::HuffmanNode>, ::compare> queue; //priority queue to order the nodes according to their frequency to help with tree building
-public:  
     std::shared_ptr<NODE::HuffmanNode> root; //pointer to the root node of the tree
 
-    HuffmanTree(std::unordered_map<char, int> map); //default constructor
+    HuffmanTree(); //default constructor
     ~HuffmanTree(); //defualt destructor
 
     //special members    
@@ -34,7 +36,7 @@ public:
     HuffmanTree & operator=(const HuffmanTree & tree_other); //assignment operator
     HuffmanTree & operator=(HuffmanTree && tree_other);//move assignment operator
 
-    void loadFrequencyMap(); //load text file and populate frequency map
+    void loadFrequencyMap(std::string filename); //load text file and populate frequency map
     void loadPriorityQueue();
     void buildTree();
 
