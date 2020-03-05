@@ -80,16 +80,23 @@ namespace TREE{
         for(auto & pair :frequencyMap){
 
             NODE::HuffmanNode n(pair.first,pair.second);
-            //cout << n.letter <<":"<< n.frequency<<endl;
+            //cout << "-----"<<n.letter <<":"<< n.frequency<<endl;
             myQueue.push(n);
-        } 
+        }
+
+    //     std::priority_queue< ::NODE::HuffmanNode, std::vector< ::NODE::HuffmanNode>, ::compare>  temp =myQueue;
+
+    // while (!temp.empty()) {
+    //     cout << "----->>>>>>"<<temp.top().letter <<":"<< temp.top().frequency<<endl;
+    //     temp.pop();
+    // }
     }
     void HuffmanTree::buildTree(){
         //shared_ptr<NODE::HuffmanNode> letter_ptr = make_shared<NODE::HuffmanNode>;
         while(myQueue.size()>1){
-            NODE::HuffmanNode left = myQueue.top(); //left node is smallest
+            NODE::HuffmanNode right = myQueue.top(); //left node is smallest
             myQueue.pop(); //discard node which is now stored in left
-            NODE::HuffmanNode right = myQueue.top();
+            NODE::HuffmanNode left = myQueue.top();
             myQueue.pop(); //discard
 
             int sum = left.frequency+right.frequency;
@@ -100,7 +107,25 @@ namespace TREE{
         }
          NODE::HuffmanNode top = myQueue.top(); //last element in queue is root
          root = make_shared<NODE::HuffmanNode>(top);
-         cout<<"TREE BUILT"<<endl;
+         myQueue.pop(); //discard last element
+        
+    }
+    
+    void HuffmanTree::traverse(std::shared_ptr<NODE::HuffmanNode> r){
+        NODE::HuffmanNode node = *r;
+        char c = node.letter;
+        cout<<node.letter<<":"<<node.frequency<<endl;
+
+        while(node.letter == c ){
+        std::shared_ptr<NODE::HuffmanNode>left = node.linkRight; //recurse left
+        node = *left;
+        cout << node.letter<<":"<<node.frequency<<endl;
+       }
+     
+
+    
+       
+       cout <<"here"<<endl;
     }
    
 

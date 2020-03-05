@@ -5,6 +5,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
 using namespace std;
 int main(void){
@@ -13,6 +14,7 @@ int main(void){
     tree.loadFrequencyMap(filename);
     tree.loadPriorityQueue();
     tree.buildTree();
-   
+    std::shared_ptr<NODE::HuffmanNode> r = tree.root;
+    tree.traverse(r);
 return 0;
 }
