@@ -101,8 +101,12 @@ TEST_CASE( "TESTING HUFFMAN TREE BUILD", "[buildTree]" ) {
 
    // cout<<node.frequency<<endl;
 
-   SECTION("root node frequency should be the sum of its children"){
-        REQUIRE(node.frequency == (leftNode.frequency+rightNode.frequency));
+   SECTION("root node frequency should be = to the sum off all the characters' frequencies"){
+       int sum =0;
+       for(const auto& pair:tree.frequencyMap){
+           sum+=pair.second;
+       }
+        REQUIRE(node.frequency == (sum));
 
     }
 
@@ -122,6 +126,44 @@ TEST_CASE( "TESTING HUFFMAN TREE BUILD", "[buildTree]" ) {
      
 
   }
+}
 
+TEST_CASE("Testing codetable string accuracy", "[createCodetable]"){
+    TREE::HuffmanTree tree; //create tree instance on the stack
+    tree.loadFrequencyMap("../../input/test.txt");
+    tree.loadPriorityQueue();
+    tree.buildTree();
+    NODE::HuffmanNode node = *(tree.root);
+    string code = "";
+    tree.createCodeTable(node.letter, tree.root, code);
+
+    
+
+    SECTION("Left most node has the lowest code - all zeros"){ 
+        char c = node.letter; //the root node
+       while(node.letter == c){
+        std::shared_ptr<NODE::HuffmanNode>left = node.linkLeft; //recurse left
+        node = *left;
+       }
+       string code = tree.codetable[node.letter];
+       for(int i = 0; i<code.length(); i++){
+          REQUIRE(code[i] == '0');
+       }
+      
+    
+  }
+
+  SECTION("Right most node has the highest code - all 1s"){ 
+        char c = node.letter; //the root node
+       while(node.letter == c){
+        std::shared_ptr<NODE::HuffmanNode>right = node.linkRight; //recurse left
+        node = *right;
+       }
+       string code = tree.codetable[node.letter];
+     for(int i = 0; i<code.length(); i++){
+          REQUIRE(code[i] == '1');
+       }
+  }
+  
 
 }

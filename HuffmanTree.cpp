@@ -25,10 +25,10 @@ The tree is a Binary tree where the parent is always greater than its children
 
 namespace TREE{
 
-
     using namespace std;
     //std::shared_ptr<NODE::HuffmanNode> root; //pointer to root node
    // std::unordered_map<char, int> frequencyMap; //holds the frequency of each letter where each letter is the key
+   std::unordered_map<char, std::string> codetable;
     HuffmanTree::HuffmanTree(){
         root=nullptr; //initliase root to point at nullptr
     }
@@ -38,8 +38,8 @@ namespace TREE{
 
 
     //special members    
-    HuffmanTree::HuffmanTree(HuffmanTree && tree_other):  myQueue(move(tree_other.myQueue)) ,frequencyMap(move(tree_other.frequencyMap)) , root(move(tree_other.root)){}//move constructor - "steal the pointers of node_other" and breaks old connection
-    HuffmanTree::HuffmanTree(HuffmanTree & tree_other): myQueue(tree_other.myQueue) , frequencyMap(tree_other.frequencyMap) , root(tree_other.root){} //copy constructor
+    HuffmanTree::HuffmanTree(HuffmanTree && tree_other):  myQueue(move(tree_other.myQueue)) ,frequencyMap(move(tree_other.frequencyMap)) , root(move(tree_other.root)), codetable(move(tree_other.codetable)){}//move constructor - "steal the pointers of node_other" and breaks old connection
+    HuffmanTree::HuffmanTree(HuffmanTree & tree_other): myQueue(tree_other.myQueue) , frequencyMap(tree_other.frequencyMap) , root(tree_other.root), codetable(tree_other.codetable){} //copy constructor
     HuffmanTree & HuffmanTree::operator=(const HuffmanTree & tree_other){ //copy assignment operator
       frequencyMap = tree_other.frequencyMap;
       myQueue = tree_other.myQueue;
@@ -119,13 +119,24 @@ namespace TREE{
         while(node.letter == c ){
         std::shared_ptr<NODE::HuffmanNode>left = node.linkRight; //recurse left
         node = *left;
-        cout << node.letter<<":"<<node.frequency<<endl;
        }
-     
+    }
 
-    
-       
-       cout <<"here"<<endl;
+    void HuffmanTree::createCodeTable(char rootChar,std::shared_ptr<NODE::HuffmanNode> r, std::string bString){
+        
+        string bitString = bString;
+        NODE::HuffmanNode node =*r;
+        if(node.letter != rootChar ){
+            char c = node.letter;
+            codetable[c] = bitString;
+
+        }else{
+            createCodeTable(rootChar, node.linkLeft, bitString+"0");
+            createCodeTable(rootChar, node.linkRight, bitString+"1");
+        }
+
+
+
     }
    
 

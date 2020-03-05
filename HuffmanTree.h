@@ -24,6 +24,7 @@ public:
     std::priority_queue< ::NODE::HuffmanNode, std::vector< ::NODE::HuffmanNode>, ::compare> myQueue; //priority queue to order the nodes according to their frequency to help with tree building
     std::unordered_map<char, int> frequencyMap; //holds the frequency of each letter where each letter is the key
     std::shared_ptr<NODE::HuffmanNode> root; //pointer to the root node of the tree
+    std::unordered_map<char, std::string> codetable; //holds string codes for each letter
 
     HuffmanTree(); //default constructor
     ~HuffmanTree(); //defualt destructor
@@ -38,6 +39,7 @@ public:
     void loadPriorityQueue();
     void buildTree();
     void traverse(std::shared_ptr<NODE::HuffmanNode> r);
+    void createCodeTable(char rootChar,std::shared_ptr<NODE::HuffmanNode>, std::string bString);
 
 };
 }

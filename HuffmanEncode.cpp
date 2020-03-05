@@ -15,6 +15,8 @@ int main(void){
     tree.loadPriorityQueue();
     tree.buildTree();
     std::shared_ptr<NODE::HuffmanNode> r = tree.root;
-    tree.traverse(r);
+   // tree.traverse(r);
+    string code = "";
+    tree.createCodeTable((*r).letter, r, "");
 return 0;
 }
