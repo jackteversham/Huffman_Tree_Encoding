@@ -29,6 +29,9 @@ namespace TREE{
     //std::shared_ptr<NODE::HuffmanNode> root; //pointer to root node
    // std::unordered_map<char, int> frequencyMap; //holds the frequency of each letter where each letter is the key
    std::unordered_map<char, std::string> codetable;
+
+   vector<char> characters; //holds each character of input file
+
     HuffmanTree::HuffmanTree(){
         root=nullptr; //initliase root to point at nullptr
     }
@@ -57,8 +60,9 @@ namespace TREE{
     }
 
     void HuffmanTree::loadFrequencyMap(std::string filename){ //load text file and populate frequency map
-   
-    vector<char> characters;
+    characters.clear();
+    frequencyMap.clear();
+    
     ifstream in;
     in.open(filename);
     if (!in){
@@ -77,19 +81,21 @@ namespace TREE{
     }
     } 
     void HuffmanTree::loadPriorityQueue(){
+        //empty the priority queue for testing purposes
+        while (!myQueue.empty()) {
+            myQueue.pop();
+        }
+    
         for(auto & pair :frequencyMap){
 
             NODE::HuffmanNode n(pair.first,pair.second);
-            //cout << "-----"<<n.letter <<":"<< n.frequency<<endl;
+          cout << "---"<<n.letter <<":"<< n.frequency<<endl;
             myQueue.push(n);
         }
 
-    //     std::priority_queue< ::NODE::HuffmanNode, std::vector< ::NODE::HuffmanNode>, ::compare>  temp =myQueue;
-
-    // while (!temp.empty()) {
-    //     cout << "----->>>>>>"<<temp.top().letter <<":"<< temp.top().frequency<<endl;
-    //     temp.pop();
-    // }
+      //  std::priority_queue< ::NODE::HuffmanNode, std::vector< ::NODE::HuffmanNode>, ::compare>  temp =myQueue;
+        
+    
     }
     void HuffmanTree::buildTree(){
         //shared_ptr<NODE::HuffmanNode> letter_ptr = make_shared<NODE::HuffmanNode>;
@@ -117,9 +123,10 @@ namespace TREE{
         cout<<node.letter<<":"<<node.frequency<<endl;
 
         while(node.letter == c ){
-        std::shared_ptr<NODE::HuffmanNode>left = node.linkRight; //recurse left
-        node = *left;
+        std::shared_ptr<NODE::HuffmanNode>right = node.linkRight; //recurse left
+        node = *right;
        }
+       cout <<node.frequency<<endl;
     }
 
     void HuffmanTree::createCodeTable(char rootChar,std::shared_ptr<NODE::HuffmanNode> r, std::string bString){
@@ -131,10 +138,29 @@ namespace TREE{
             codetable[c] = bitString;
 
         }else{
-            createCodeTable(rootChar, node.linkLeft, bitString+"0");
+            createCodeTable(rootChar, node.linkLeft, bitString+"0"); //recursive call
             createCodeTable(rootChar, node.linkRight, bitString+"1");
         }
+    }
 
+    void HuffmanTree::compress(std::string filename){
+       ofstream out;
+       out.open("../output/"+filename+".txt");
+        std::string outString = "";
+        for(const auto& c: characters){
+            outString = outString+codetable[c];
+        }
+        out.write(outString.c_str(), outString.length());
+        out.close();
+
+        out.open("../output/"+filename+".hdr");
+        outString = "";
+        for( auto& pair: codetable){
+            //outString = pair.first+": "+pair.second+"\n";
+            out << pair.first<<':'<<pair.second<<'\n';
+        }
+        
+        out.close();
 
 
     }

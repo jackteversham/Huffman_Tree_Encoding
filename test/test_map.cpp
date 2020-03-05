@@ -17,59 +17,44 @@
 // }
 using namespace std;
 
-
+TREE::HuffmanTree tree; //create tree instance on the stack
 
 TEST_CASE( "FREQUENCY MAP IS BUILT", "[loadFrequencyMap]" ) {
 
-    // vector<char> characters;
-    // std::ifstream in;
-    // in.open("../../input/test.txt");
-    // if (!in){
-    //     cout << "file not found" << endl;
-    // }else{
-    //     char c=0;
-    //     while(!in.eof()){
-    //      in >> c >> noskipws;
-    //      characters.push_back(c); //put all characters into a vector
-    //     }
-    //     for(const auto& c:characters){
-    //         fmap[c]++;
-    //     }
-        
-    // }
+    
 
     SECTION("Testing frequency map character frequencies for known input of characters and their frequencies"){
 
-    TREE::HuffmanTree tree; //create tree instance on the stack
+    
     tree.loadFrequencyMap("../../input/test.txt");
-    std::unordered_map<char, int> fmap = tree.frequencyMap; //holds the frequency of each letter where each letter is the key
+   // std::unordered_map<char, int> tree.frequencyMap = tree.frequencyMap; //holds the frequency of each letter where each letter is the key
 
-    REQUIRE( fmap['c'] == 2 );
-    REQUIRE( fmap['t'] == 2 );
-    REQUIRE( fmap['i'] == 1 );
-    REQUIRE( fmap[' '] == 7 );
-    REQUIRE( fmap['e'] == 6 );
-    REQUIRE( fmap['b'] == 1 );
-    REQUIRE( fmap['q'] == 1 );
-    REQUIRE( fmap['u'] == 2 );
-    REQUIRE( fmap['k'] == 1 );
-    REQUIRE( fmap['r'] == 2 );
-    REQUIRE( fmap['o'] == 3 );
-    REQUIRE( fmap['w'] == 1 );
-    REQUIRE( fmap['n'] == 2 );
-    REQUIRE( fmap['f'] == 2 );
-    REQUIRE( fmap['\n'] == 2 );
-    REQUIRE( fmap['x'] == 1 );
-    REQUIRE( fmap['j'] == 1 );
-    REQUIRE( fmap['m'] == 1 );
-    REQUIRE( fmap['p'] == 1 );
-    REQUIRE( fmap['d'] == 1 );
-    REQUIRE( fmap['v'] == 1 );
-    REQUIRE( fmap['h'] == 2 );
+    REQUIRE( tree.frequencyMap['c'] == 2 );
+    REQUIRE( tree.frequencyMap['t'] == 2 );
+    REQUIRE( tree.frequencyMap['i'] == 1 );
+    REQUIRE( tree.frequencyMap[' '] == 7 );
+    REQUIRE( tree.frequencyMap['e'] == 6 );
+    REQUIRE( tree.frequencyMap['b'] == 1 );
+    REQUIRE( tree.frequencyMap['q'] == 1 );
+    REQUIRE( tree.frequencyMap['u'] == 2 );
+    REQUIRE( tree.frequencyMap['k'] == 1 );
+    REQUIRE( tree.frequencyMap['r'] == 2 );
+    REQUIRE( tree.frequencyMap['o'] == 3 );
+    REQUIRE( tree.frequencyMap['w'] == 1 );
+    REQUIRE( tree.frequencyMap['n'] == 2 );
+    REQUIRE( tree.frequencyMap['f'] == 2 );
+    REQUIRE( tree.frequencyMap['\n'] == 2 );
+    REQUIRE( tree.frequencyMap['x'] == 1 );
+    REQUIRE( tree.frequencyMap['j'] == 1 );
+    REQUIRE( tree.frequencyMap['m'] == 1 );
+    REQUIRE( tree.frequencyMap['p'] == 1 );
+    REQUIRE( tree.frequencyMap['d'] == 1 );
+    REQUIRE( tree.frequencyMap['v'] == 1 );
+    REQUIRE( tree.frequencyMap['h'] == 2 );
     } 
 
     SECTION("PRIORITY QUEUE SHOULD HAVE SMALLEST FREQUENCY AT TOP AND BIGGEST AT BOTTOM"){
-        TREE::HuffmanTree tree; //create tree instance on the stack
+        //TREE::HuffmanTree tree; //create tree instance on the stack
         tree.loadFrequencyMap("../../input/test.txt");
         tree.loadPriorityQueue();
 
@@ -87,7 +72,7 @@ TEST_CASE( "FREQUENCY MAP IS BUILT", "[loadFrequencyMap]" ) {
 
 
 TEST_CASE( "TESTING HUFFMAN TREE BUILD", "[buildTree]" ) {
-    TREE::HuffmanTree tree; //create tree instance on the stack
+    //TREE::HuffmanTree tree; //create tree instance on the stack
     tree.loadFrequencyMap("../../input/test.txt");
     tree.loadPriorityQueue();
     tree.buildTree();
@@ -129,7 +114,7 @@ TEST_CASE( "TESTING HUFFMAN TREE BUILD", "[buildTree]" ) {
 }
 
 TEST_CASE("Testing codetable string accuracy", "[createCodetable]"){
-    TREE::HuffmanTree tree; //create tree instance on the stack
+    //TREE::HuffmanTree tree; //create tree instance on the stack
     tree.loadFrequencyMap("../../input/test.txt");
     tree.loadPriorityQueue();
     tree.buildTree();
@@ -165,5 +150,4 @@ TEST_CASE("Testing codetable string accuracy", "[createCodetable]"){
        }
   }
   
-
 }

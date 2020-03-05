@@ -40,6 +40,7 @@ public:
     void buildTree();
     void traverse(std::shared_ptr<NODE::HuffmanNode> r);
     void createCodeTable(char rootChar,std::shared_ptr<NODE::HuffmanNode>, std::string bString);
+    void compress(std::string filename);
 
 };
 }
