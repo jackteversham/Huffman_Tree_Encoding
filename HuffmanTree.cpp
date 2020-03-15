@@ -29,8 +29,8 @@ namespace TREE{
     //std::shared_ptr<NODE::HuffmanNode> root; //pointer to root node
    // std::unordered_map<char, int> frequencyMap; //holds the frequency of each letter where each letter is the key
    std::unordered_map<char, std::string> codetable;
-
    vector<char> characters; //holds each character of input file
+
 
     HuffmanTree::HuffmanTree(){
         root=nullptr; //initliase root to point at nullptr
@@ -59,7 +59,7 @@ namespace TREE{
       return *this; //return reference to the current object
     }
 
-    void HuffmanTree::loadFrequencyMap(std::string filename){ //load text file and populate frequency map
+    void HuffmanTree::loadFrequencyMap(const std::string filename){ //load text file and populate frequency map
     characters.clear();
     frequencyMap.clear();
     
@@ -73,6 +73,7 @@ namespace TREE{
          in >> c >> noskipws;
          characters.push_back(c); //put all characters into a vector
         }
+      
 
         for(const auto&c:characters){
             HuffmanTree::frequencyMap[c]++;
@@ -85,17 +86,14 @@ namespace TREE{
         while (!myQueue.empty()) {
             myQueue.pop();
         }
-    
         for(auto & pair :frequencyMap){
 
             NODE::HuffmanNode n(pair.first,pair.second);
-          cout << "---"<<n.letter <<":"<< n.frequency<<endl;
+          //cout << "---"<<n.letter <<":"<< n.frequency<<endl;
             myQueue.push(n);
         }
 
       //  std::priority_queue< ::NODE::HuffmanNode, std::vector< ::NODE::HuffmanNode>, ::compare>  temp =myQueue;
-        
-    
     }
     void HuffmanTree::buildTree(){
         //shared_ptr<NODE::HuffmanNode> letter_ptr = make_shared<NODE::HuffmanNode>;
@@ -120,17 +118,16 @@ namespace TREE{
     void HuffmanTree::traverse(std::shared_ptr<NODE::HuffmanNode> r){
         NODE::HuffmanNode node = *r;
         char c = node.letter;
-        cout<<node.letter<<":"<<node.frequency<<endl;
+        //cout<<node.letter<<":"<<node.frequency<<endl;
 
         while(node.letter == c ){
         std::shared_ptr<NODE::HuffmanNode>right = node.linkRight; //recurse left
         node = *right;
        }
-       cout <<node.frequency<<endl;
+       //cout <<node.frequency<<endl;
     }
 
-    void HuffmanTree::createCodeTable(char rootChar,std::shared_ptr<NODE::HuffmanNode> r, std::string bString){
-        
+    void HuffmanTree::createCodeTable(const char rootChar,std::shared_ptr<NODE::HuffmanNode> r, std::string bString){
         string bitString = bString;
         NODE::HuffmanNode node =*r;
         if(node.letter != rootChar ){
@@ -143,7 +140,7 @@ namespace TREE{
         }
     }
 
-    void HuffmanTree::compress(std::string filename){
+    std::string HuffmanTree::compress(const std::string filename){
        ofstream out;
        out.open("../output/"+filename+".txt");
         std::string outString = "";
@@ -152,21 +149,111 @@ namespace TREE{
         }
         out.write(outString.c_str(), outString.length());
         out.close();
+        //cout << outString <<endl;
 
         out.open("../output/"+filename+".hdr");
-        outString = "";
+        //outString = "";
+        out << "field count: "<<codetable.size()<<"\n";
         for( auto& pair: codetable){
             //outString = pair.first+": "+pair.second+"\n";
             out << pair.first<<':'<<pair.second<<'\n';
         }
         
         out.close();
-
-
+        return outString;
     }
+    string HuffmanTree::strToBinary(string s) 
+    {    
+    std::string bin = "";     
+    int n = s.length(); 
+    for (int i = 0; i <= n; i++) 
+    { 
+        // convert each char to 
+        // ASCII value 
+        int val = int(s[i]); 
+  
+        // Convert ASCII value to binary 
+        bin = ""; 
+        while (val > 0) 
+        { 
+            (val % 2)? bin.push_back('1') : 
+                       bin.push_back('0'); 
+            val /= 2; 
+        } 
+        reverse(bin.begin(), bin.end()); 
+  
+       // cout << bin ; 
+        //cout <<bin[0];
+    } 
+    return bin;
+} 
+
+int HuffmanTree::bitPack(std::string outputBits, std::ofstream &ofs, std::string filename){
+            ofs.open(filename, ios::binary);
+            //../output/"+filename+"Binary"
+    
+            int length = outputBits.length();
+            for (auto i = 0; i < length; i+=8){
+                unsigned char byte = 0;
+                std::string byteString = "";
+                if(i+8 < length){byteString = outputBits.substr(i, i+8);} //take 1 byte chunks of the output bit buffer
+                else{byteString = outputBits.substr(i, length);}
+                for(unsigned b = 0; b != 8; ++b){ //loop through each bit of the string of bits
+                    if(b<byteString.length()){
+                        byte |= (byteString[b]&1) << b; //and with 1 and shift left by b
+                    }
+                    else{
+                        byte |= 1 << b; //bitwise operations to pack
+                     }
+                }
+                ofs.put(byte);
+            }
+            int outputPosition = ofs.tellp();
+            int bytesWritten = outputPosition+1;
+            //cout << bytesWritten << endl;
+            ofs.close();
+
+            ofs.open("../output/"+filename+"BinaryHeader.hdr", ios::binary);
+            ofs << bytesWritten*8;
+            ofs.close();
+            return bytesWritten;
+}
+
+std::string HuffmanTree::unpack(std::string filename){
+            std::string recoveredString = "";
+            ifstream ifs;
+
+            ifs.open(filename+"BinaryHeader.hdr");
+            if (!ifs){
+                return "File not found";
+            }
+            int bits=0;
+            ifs >> bits;
+            ifs.close();
+
+            ifs.open(filename+"Binary", ios::binary);
+            //std::string buffer;
+             char buffer[bits/8];
+            ifs.read(buffer, sizeof(buffer));
+           // ifs >> buffer; //load bits into string buffer
+            //cout << buffer<<endl;
+            bitset<8> byte;
+            std::string bitstring;
+
+            for(int i=0; i <bits/8; i++){ //loop number of bytes times
+                byte = buffer[i];
+                bitstring = byte.to_string();
+                std::string reverse;
+                for(int j = bitstring.length()-1; j>=0; j--){ //reverse the string and add to the final string
+                    reverse +=bitstring[j];
+                }
+                recoveredString += reverse;
+            }
+        return recoveredString;
+
+
+}
    
-
-
 }
 
  

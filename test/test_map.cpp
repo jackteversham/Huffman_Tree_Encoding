@@ -21,8 +21,6 @@ TREE::HuffmanTree tree; //create tree instance on the stack
 
 TEST_CASE( "FREQUENCY MAP IS BUILT", "[loadFrequencyMap]" ) {
 
-    
-
     SECTION("Testing frequency map character frequencies for known input of characters and their frequencies"){
 
     
@@ -149,5 +147,47 @@ TEST_CASE("Testing codetable string accuracy", "[createCodetable]"){
           REQUIRE(code[i] == '1');
        }
   }
+
   
+}
+
+TEST_CASE("Testing compression ratios and accuracy", "[bitPacking/Unpacking]"){
+    tree.loadFrequencyMap("../../input/test.txt");
+    tree.loadPriorityQueue();
+    tree.buildTree();
+     NODE::HuffmanNode node = *(tree.root);
+    string code = "";
+    tree.createCodeTable(node.letter, tree.root, code);
+
+    std::string outString = tree.compress("../../output/out.txt"); //writes huffman enocded strings to output file
+    
+    int Nbits = outString.length()*8;
+    int outputBytes = (Nbits/8) + (Nbits%8 ? 1 : 0); //takes into account padding bits
+   // cout << outString<<endl;
+    int inputBytes = tree.characters.size();
+
+    //tree.strToBinary("the quick brown fox jumped over the fence");
+    double compressionRatioBefore = (double)inputBytes/outputBytes;
+    ofstream ofs;
+    int n = tree.bitPack(outString,ofs,"../../output/outBinary");
+    double compressionRatioAfter = (double)inputBytes/(double)n;
+    std::string recoveredString = "";
+    recoveredString = tree.unpack("../../output/out");
+
+    SECTION("Size of bit packed file should be less than input file size"){
+        REQUIRE(compressionRatioBefore <1);
+        REQUIRE(compressionRatioAfter>1);
+    }
+
+    std:string inputBitString = "";
+    outString="";
+    for(auto &c: tree.characters){
+            outString = outString+tree.codetable[c];
+    }    
+
+    SECTION("Unpacked file must be the same as the input file"){
+        REQUIRE(outString == recoveredString.substr(0, outString.length()));
+    
+    }
+
 }

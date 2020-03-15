@@ -25,6 +25,8 @@ public:
     std::unordered_map<char, int> frequencyMap; //holds the frequency of each letter where each letter is the key
     std::shared_ptr<NODE::HuffmanNode> root; //pointer to the root node of the tree
     std::unordered_map<char, std::string> codetable; //holds string codes for each letter
+    std::vector<char> characters; //holds each character of input file
+
 
     HuffmanTree(); //default constructor
     ~HuffmanTree(); //defualt destructor
@@ -35,12 +37,15 @@ public:
     HuffmanTree & operator=(const HuffmanTree & tree_other); //assignment operator
     HuffmanTree & operator=(HuffmanTree && tree_other);//move assignment operator
 
-    void loadFrequencyMap(std::string filename); //load text file and populate frequency map
+    void loadFrequencyMap(const std::string filename); //load text file and populate frequency map
     void loadPriorityQueue();
     void buildTree();
     void traverse(std::shared_ptr<NODE::HuffmanNode> r);
-    void createCodeTable(char rootChar,std::shared_ptr<NODE::HuffmanNode>, std::string bString);
-    void compress(std::string filename);
+    void createCodeTable(const char rootChar,std::shared_ptr<NODE::HuffmanNode>, std::string bString);
+    std::string compress(const std::string filename);
+    std::string strToBinary(const std::string);
+    int bitPack(std::string outputBits, std::ofstream &ofs, std::string filename);
+    std::string unpack(std::string filename);
 
 };
 }
