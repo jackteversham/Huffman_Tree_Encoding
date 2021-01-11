@@ -1,0 +1,3 @@
+You are asked to write a compression algorithm to compress English language text files. You decide to use a Huffman encoder, which is a fairly quick and easy way of turning a sequence of ASCII characters into a compressed bit stream. For this tutorial, you need only implement the compression side, and you do not need to pack the output into a stream of bytes. 
+
+You can simply use the ASCII characters 0 and 1 to represent the compressed bit representation. Of course, your compression factor will be 8x less as a consequence! So for extra credit, you can do some bit operations to pack the 0s and 1s into an array of bytes.
