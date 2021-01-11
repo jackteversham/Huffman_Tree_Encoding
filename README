@@ -16,4 +16,6 @@ For Testing:
 
 in the 'src' folder, run make test.
 Note that the 1st test case is directed at testing the input file 'test.txt' and will fail for other input files. 
+Other test cases are also directed all at the file 'test.txt'
 the purpose of this was to test the frequency map with a known input string.
+./
