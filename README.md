@@ -1,7 +1,6 @@
 # Huffman Tree Compression
 
 A Huffman encoder compression algorithm is used to compress English language text files. 
-
 It is a fairly quick and easy way of turning a sequence of ASCII characters into a compressed bit stream.
 
 To compile:
